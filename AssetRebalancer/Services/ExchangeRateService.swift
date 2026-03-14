@@ -30,8 +30,11 @@ actor ExchangeRateService {
             return rate
         }
 
-        // Default fallback rate
-        return cachedRate ?? 32.0
+        // Use cached rate if available, otherwise throw error
+        if let rate = cachedRate {
+            return rate
+        }
+        throw ExchangeRateError.allSourcesFailed
     }
 
     private func fetchFromExchangeRateAPI() async throws -> Double {
@@ -75,11 +78,13 @@ actor ExchangeRateService {
 enum ExchangeRateError: LocalizedError {
     case invalidURL
     case parseError
+    case allSourcesFailed
 
     var errorDescription: String? {
         switch self {
         case .invalidURL: return "Invalid URL"
         case .parseError: return "Failed to parse exchange rate"
+        case .allSourcesFailed: return "All exchange rate sources failed. Please check your network connection."
         }
     }
 }

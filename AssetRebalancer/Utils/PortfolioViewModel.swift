@@ -12,8 +12,20 @@ class PortfolioViewModel: ObservableObject {
     @Published var isLoading = false
     @Published var isRefreshing = false
     @Published var errorMessage: String?
+    @Published var hideAssets: Bool {
+        didSet {
+            UserDefaults.standard.set(hideAssets, forKey: "hide_assets")
+        }
+    }
 
     private let firestore = FirestoreService.shared
+
+    /// Masked placeholder for hidden values
+    static let maskedText = "••••••"
+
+    init() {
+        self.hideAssets = UserDefaults.standard.bool(forKey: "hide_assets")
+    }
 
     // MARK: - Load Data
 
@@ -29,6 +41,7 @@ class PortfolioViewModel: ObservableObject {
             assets = try await fetchedAssets
             targetAllocation = try await fetchedTarget
             deviationThreshold = try await fetchedThreshold
+            errorMessage = nil
 
             await refreshPrices()
         } catch {
@@ -45,47 +58,57 @@ class PortfolioViewModel: ObservableObject {
         let exchangeRate: Double
         do {
             exchangeRate = try await ExchangeRateService.shared.getUSDToTWD()
+            errorMessage = nil
         } catch {
             errorMessage = "Failed to fetch exchange rate"
             recalculate()
             return
         }
 
-        for i in assets.indices {
-            let asset = assets[i]
+        var updatedAssets = assets
+        var failedSymbols: [String] = []
 
-            if asset.category == .stock, let market = asset.marketType {
+        for i in updatedAssets.indices {
+            let asset = updatedAssets[i]
+
+            if (asset.category == .stock || asset.category == .bond), let market = asset.marketType {
                 do {
                     let price = try await StockAPIService.shared.fetchPrice(
                         symbol: asset.symbol, market: market
                     )
-                    assets[i].marketPrice = price
+                    updatedAssets[i].marketPrice = price
 
                     switch market {
                     case .tw:
-                        assets[i].marketValueTWD = price * asset.shares
+                        updatedAssets[i].marketValueTWD = price * asset.shares
                     case .us:
-                        assets[i].marketValueTWD = price * asset.shares * exchangeRate
+                        updatedAssets[i].marketValueTWD = price * asset.shares * exchangeRate
                     }
                 } catch {
+                    failedSymbols.append(asset.symbol)
                     // Use manual price as fallback
                     if let manual = asset.manualPrice {
-                        assets[i].marketPrice = manual
+                        updatedAssets[i].marketPrice = manual
                         switch market {
                         case .tw:
-                            assets[i].marketValueTWD = manual * asset.shares
+                            updatedAssets[i].marketValueTWD = manual * asset.shares
                         case .us:
-                            assets[i].marketValueTWD = manual * asset.shares * exchangeRate
+                            updatedAssets[i].marketValueTWD = manual * asset.shares * exchangeRate
                         }
                     }
                 }
-            } else if asset.category == .bond {
-                // Bonds use manual value
-                assets[i].marketValueTWD = asset.shares
             } else if asset.category == .cash {
                 // Cash: shares = amount in TWD
-                assets[i].marketValueTWD = asset.shares
+                updatedAssets[i].marketValueTWD = asset.shares
             }
+        }
+
+        assets = updatedAssets
+
+        if !failedSymbols.isEmpty {
+            errorMessage = "Failed to fetch prices for: \(failedSymbols.joined(separator: ", "))"
+        } else {
+            errorMessage = nil
         }
 
         recalculate()
@@ -95,7 +118,7 @@ class PortfolioViewModel: ObservableObject {
 
     func recalculate() {
         summary = Rebalancer.calculateSummary(
-            assets: assets, target: targetAllocation
+            assets: assets, target: targetAllocation, threshold: deviationThreshold
         )
         rebalanceActions = Rebalancer.calculateActions(
             assets: assets, target: targetAllocation, threshold: deviationThreshold
@@ -110,9 +133,12 @@ class PortfolioViewModel: ObservableObject {
 
         do {
             try await firestore.saveAsset(asset)
+            errorMessage = nil
         } catch {
             errorMessage = error.localizedDescription
         }
+
+        await refreshPrices()
     }
 
     func updateAsset(_ asset: Asset) async {
@@ -122,6 +148,7 @@ class PortfolioViewModel: ObservableObject {
 
             do {
                 try await firestore.saveAsset(asset)
+                errorMessage = nil
             } catch {
                 errorMessage = error.localizedDescription
             }
@@ -134,6 +161,7 @@ class PortfolioViewModel: ObservableObject {
 
         do {
             try await firestore.deleteAsset(assetID)
+            errorMessage = nil
         } catch {
             errorMessage = error.localizedDescription
         }

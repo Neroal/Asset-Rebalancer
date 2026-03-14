@@ -6,7 +6,6 @@ actor StockAPIService {
 
     private var cache: [String: (price: Double, timestamp: Date)] = [:]
     private let cacheDuration: TimeInterval = 3600 // 1 hour
-    private var exchangeCache: [String: String] = [:] // symbol -> "tse" or "otc"
 
     // MARK: - Fetch Price
 

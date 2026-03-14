@@ -1,13 +1,15 @@
 import SwiftUI
 
 struct AssetRowView: View {
+    @EnvironmentObject var lang: LanguageViewModel
     let asset: Asset
+    var hideAssets: Bool = false
 
     var body: some View {
         HStack(spacing: 12) {
             // Category indicator
             Circle()
-                .fill(colorForCategory(asset.category))
+                .fill(asset.category.swiftUIColor)
                 .frame(width: 10, height: 10)
 
             // Symbol & Name
@@ -38,7 +40,11 @@ struct AssetRowView: View {
 
             // Value info
             VStack(alignment: .trailing, spacing: 2) {
-                if let valueTWD = asset.marketValueTWD {
+                if hideAssets {
+                    Text("NT$ \(PortfolioViewModel.maskedText)")
+                        .font(.subheadline)
+                        .fontWeight(.medium)
+                } else if let valueTWD = asset.marketValueTWD {
                     Text(Rebalancer.formatCurrency(valueTWD))
                         .font(.subheadline)
                         .fontWeight(.medium)
@@ -48,13 +54,17 @@ struct AssetRowView: View {
                         .fontWeight(.medium)
                 }
 
-                if asset.category == .stock {
-                    if let price = asset.marketPrice {
+                if asset.category == .stock || asset.category == .bond {
+                    if hideAssets {
+                        Text("••••")
+                            .font(.caption)
+                            .foregroundColor(.secondary)
+                    } else if let price = asset.marketPrice {
                         Text("\(String(format: "%.2f", price)) × \(String(format: "%.0f", asset.shares))")
                             .font(.caption)
                             .foregroundColor(.secondary)
                     } else {
-                        Text("\(String(format: "%.0f", asset.shares)) 株")
+                        Text("\(String(format: "%.0f", asset.shares)) \(lang.stockUnit)")
                             .font(.caption)
                             .foregroundColor(.secondary)
                     }
@@ -62,13 +72,5 @@ struct AssetRowView: View {
             }
         }
         .padding(.vertical, 4)
-    }
-
-    private func colorForCategory(_ category: AssetCategory) -> Color {
-        switch category {
-        case .stock: return .blue
-        case .bond: return .green
-        case .cash: return .orange
-        }
     }
 }

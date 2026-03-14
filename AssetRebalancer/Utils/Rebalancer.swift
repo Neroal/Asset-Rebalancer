@@ -3,7 +3,7 @@ import Foundation
 // MARK: - Rebalancer
 struct Rebalancer {
 
-    static func calculateSummary(assets: [Asset], target: TargetAllocation) -> PortfolioSummary {
+    static func calculateSummary(assets: [Asset], target: TargetAllocation, threshold: Double = 5.0) -> PortfolioSummary {
         var categoryValues: [AssetCategory: Double] = [:]
         for category in AssetCategory.allCases {
             categoryValues[category] = 0
@@ -28,7 +28,7 @@ struct Rebalancer {
             deviations[category] = percentage - target.percentage(for: category)
         }
 
-        let needsRebalance = deviations.values.contains { abs($0) > 5.0 }
+        let needsRebalance = deviations.values.contains { abs($0) > threshold }
 
         return PortfolioSummary(
             totalValueTWD: totalValue,
@@ -44,7 +44,7 @@ struct Rebalancer {
         target: TargetAllocation,
         threshold: Double = 5.0
     ) -> [RebalanceAction] {
-        let summary = calculateSummary(assets: assets, target: target)
+        let summary = calculateSummary(assets: assets, target: target, threshold: threshold)
         let total = summary.totalValueTWD
 
         guard total > 0 else { return [] }

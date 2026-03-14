@@ -1,9 +1,15 @@
 import SwiftUI
+import FirebaseAuth
 
 struct SettingsView: View {
     @EnvironmentObject var authVM: AuthViewModel
     @EnvironmentObject var portfolioVM: PortfolioViewModel
     @EnvironmentObject var lang: LanguageViewModel
+    @State private var showSaveSuccess = false
+    @State private var showDeleteAccountConfirmation = false
+    @State private var isDeletingAccount = false
+    @State private var showDeleteError = false
+    @State private var deleteErrorMessage = ""
 
     var body: some View {
         NavigationStack {
@@ -24,6 +30,12 @@ struct SettingsView: View {
                                 }
                                 .frame(width: 44, height: 44)
                                 .clipShape(Circle())
+                            } else {
+                                Image(systemName: "person.circle.fill")
+                                    .resizable()
+                                    .scaledToFit()
+                                    .frame(width: 44, height: 44)
+                                    .foregroundColor(.gray)
                             }
 
                             VStack(alignment: .leading, spacing: 4) {
@@ -59,7 +71,7 @@ struct SettingsView: View {
                                 portfolioVM.targetAllocation.bond +
                                 portfolioVM.targetAllocation.cash
                     HStack {
-                        Text(lang.language == .zh ? "合計" : "Total")
+                        Text(lang.total)
                             .fontWeight(.semibold)
                         Spacer()
                         Text(Rebalancer.formatPercentage(total))
@@ -68,7 +80,12 @@ struct SettingsView: View {
                     }
 
                     Button(lang.save) {
-                        Task { await portfolioVM.saveTarget() }
+                        Task {
+                            await portfolioVM.saveTarget()
+                            if portfolioVM.errorMessage == nil {
+                                showSaveSuccess = true
+                            }
+                        }
                     }
                     .disabled(!portfolioVM.targetAllocation.isValid)
                 }
@@ -99,7 +116,7 @@ struct SettingsView: View {
                     }
                 }
 
-                // Sign Out
+                // Sign Out & Delete Account
                 Section {
                     Button(role: .destructive) {
                         authVM.signOut()
@@ -110,9 +127,51 @@ struct SettingsView: View {
                             Spacer()
                         }
                     }
+
+                    Button(role: .destructive) {
+                        showDeleteAccountConfirmation = true
+                    } label: {
+                        HStack {
+                            Spacer()
+                            if isDeletingAccount {
+                                ProgressView()
+                                    .padding(.trailing, 8)
+                            }
+                            Text(lang.deleteAccountTitle)
+                            Spacer()
+                        }
+                    }
+                    .disabled(isDeletingAccount)
+                    .alert(lang.deleteAccountConfirmTitle, isPresented: $showDeleteAccountConfirmation) {
+                        Button(lang.cancel, role: .cancel) {}
+                        Button(lang.delete, role: .destructive) {
+                            isDeletingAccount = true
+                            Task {
+                                await authVM.deleteAccount()
+                                isDeletingAccount = false
+                                if let error = authVM.errorMessage {
+                                    deleteErrorMessage = error
+                                    showDeleteError = true
+                                    authVM.errorMessage = nil
+                                }
+                            }
+                        }
+                    } message: {
+                        Text(lang.deleteAccountConfirmMessage)
+                    }
                 }
             }
             .navigationTitle(lang.tabSettings)
+            .alert(lang.saveSuccessTitle, isPresented: $showSaveSuccess) {
+                Button("OK", role: .cancel) {}
+            } message: {
+                Text(lang.saveSuccessMessage)
+            }
+            .alert(lang.errorOccurred, isPresented: $showDeleteError) {
+                Button("OK", role: .cancel) {}
+            } message: {
+                Text(deleteErrorMessage)
+            }
         }
     }
 }

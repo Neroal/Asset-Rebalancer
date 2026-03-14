@@ -5,6 +5,8 @@ struct AssetsView: View {
     @EnvironmentObject var lang: LanguageViewModel
     @State private var showAddSheet = false
     @State private var editingAsset: Asset?
+    @State private var assetToDelete: Asset?
+    @State private var showDeleteConfirmation = false
 
     var body: some View {
         NavigationStack {
@@ -14,16 +16,15 @@ struct AssetsView: View {
                     if !categoryAssets.isEmpty {
                         Section {
                             ForEach(categoryAssets) { asset in
-                                AssetRowView(asset: asset)
+                                AssetRowView(asset: asset, hideAssets: portfolioVM.hideAssets)
                                     .contentShape(Rectangle())
                                     .onTapGesture {
                                         editingAsset = asset
                                     }
-                                    .swipeActions(edge: .trailing, allowsFullSwipe: true) {
+                                    .swipeActions(edge: .trailing, allowsFullSwipe: false) {
                                         Button(role: .destructive) {
-                                            Task {
-                                                await portfolioVM.deleteAsset(asset.id)
-                                            }
+                                            assetToDelete = asset
+                                            showDeleteConfirmation = true
                                         } label: {
                                             Label(lang.delete, systemImage: "trash")
                                         }
@@ -31,14 +32,14 @@ struct AssetsView: View {
                             }
                         } header: {
                             HStack {
-                                Text(lang.language == .zh
-                                     ? category.displayName.zh
-                                     : category.displayName.en)
+                                Text(lang.localized(category.displayName))
                                 Spacer()
                                 let subtotal = categoryAssets.reduce(0) {
                                     $0 + ($1.marketValueTWD ?? $1.displayValue)
                                 }
-                                Text(Rebalancer.formatCurrency(subtotal))
+                                Text(portfolioVM.hideAssets
+                                     ? "NT$ \(PortfolioViewModel.maskedText)"
+                                     : Rebalancer.formatCurrency(subtotal))
                                     .font(.caption)
                             }
                         }
@@ -49,13 +50,30 @@ struct AssetsView: View {
                     ContentUnavailableView {
                         Label(lang.addAsset, systemImage: "plus.circle")
                     } description: {
-                        Text(lang.language == .zh
-                             ? "點擊右上角新增你的第一筆資產"
-                             : "Tap + to add your first asset")
+                        Text(lang.emptyAssetHint)
+                    }
+                    .contentShape(Rectangle())
+                    .onTapGesture {
+                        showAddSheet = true
                     }
                 }
             }
             .navigationTitle(lang.tabAssets)
+            .alert(lang.deleteConfirmTitle, isPresented: $showDeleteConfirmation) {
+                Button(lang.cancel, role: .cancel) {
+                    assetToDelete = nil
+                }
+                Button(lang.delete, role: .destructive) {
+                    if let asset = assetToDelete {
+                        Task {
+                            await portfolioVM.deleteAsset(asset.id)
+                        }
+                        assetToDelete = nil
+                    }
+                }
+            } message: {
+                Text(lang.deleteConfirmMessage)
+            }
             .toolbar {
                 ToolbarItem(placement: .topBarTrailing) {
                     Button {
@@ -98,7 +116,7 @@ struct AddAssetView: View {
                 Section {
                     Picker(lang.language == .zh ? "類別" : "Category", selection: $category) {
                         ForEach(AssetCategory.allCases) { cat in
-                            Text(lang.language == .zh ? cat.displayName.zh : cat.displayName.en)
+                            Text(lang.localized(cat.displayName))
                                 .tag(cat)
                         }
                     }
@@ -107,10 +125,10 @@ struct AddAssetView: View {
 
                 // Fields based on category
                 Section {
-                    if category == .stock {
+                    if category == .stock || category == .bond {
                         Picker(lang.market, selection: $marketType) {
                             ForEach(MarketType.allCases, id: \.self) { type in
-                                Text(type.displayName).tag(type)
+                                Text(lang.localized(type.displayName)).tag(type)
                             }
                         }
 
@@ -122,10 +140,6 @@ struct AddAssetView: View {
 
                         TextField("\(lang.price) (\(lang.language == .zh ? "選填" : "Optional"))",
                                   text: $manualPrice)
-                            .keyboardType(.decimalPad)
-                    } else if category == .bond {
-                        TextField(lang.name, text: $nameField)
-                        TextField("\(lang.amount) (TWD)", text: $shares)
                             .keyboardType(.decimalPad)
                     } else {
                         TextField(lang.name, text: $nameField)
@@ -153,15 +167,23 @@ struct AddAssetView: View {
 
     private func saveAsset() {
         let sharesValue = Double(shares) ?? 0
+        guard sharesValue > 0 else {
+            portfolioVM.errorMessage = lang.invalidInput
+            return
+        }
         let priceValue = Double(manualPrice)
+        if let price = priceValue, price < 0 {
+            portfolioVM.errorMessage = lang.invalidInput
+            return
+        }
 
         let asset = Asset(
             category: category,
-            symbol: category == .stock ? symbol.uppercased() : (nameField.isEmpty ? (lang.language == .zh ? "現金" : "Cash") : nameField),
+            symbol: (category == .stock || category == .bond) ? symbol.uppercased() : (nameField.isEmpty ? (lang.language == .zh ? "現金" : "Cash") : nameField),
             name: nameField.isEmpty ? symbol.uppercased() : nameField,
             shares: sharesValue,
             manualPrice: priceValue,
-            marketType: category == .stock ? marketType : nil
+            marketType: (category == .stock || category == .bond) ? marketType : nil
         )
 
         Task {
@@ -197,10 +219,10 @@ struct EditAssetView: View {
         NavigationStack {
             Form {
                 Section {
-                    if asset.category == .stock {
+                    if asset.category == .stock || asset.category == .bond {
                         Picker(lang.market, selection: $marketType) {
                             ForEach(MarketType.allCases, id: \.self) { type in
-                                Text(type.displayName).tag(type)
+                                Text(lang.localized(type.displayName)).tag(type)
                             }
                         }
                         TextField(lang.symbol, text: $symbol)
@@ -217,18 +239,22 @@ struct EditAssetView: View {
                 }
 
                 if let price = asset.marketPrice {
-                    Section(lang.language == .zh ? "市場資訊" : "Market Info") {
+                    Section(lang.marketInfo) {
                         HStack {
-                            Text(lang.language == .zh ? "市場價格" : "Market Price")
+                            Text(lang.marketPrice)
                             Spacer()
-                            Text(String(format: "%.2f", price))
+                            Text(portfolioVM.hideAssets
+                                 ? PortfolioViewModel.maskedText
+                                 : String(format: "%.2f", price))
                                 .foregroundColor(.secondary)
                         }
                         if let valueTWD = asset.marketValueTWD {
                             HStack {
-                                Text(lang.language == .zh ? "市值(TWD)" : "Value (TWD)")
+                                Text(lang.valueTWD)
                                 Spacer()
-                                Text(Rebalancer.formatCurrency(valueTWD))
+                                Text(portfolioVM.hideAssets
+                                     ? "NT$ \(PortfolioViewModel.maskedText)"
+                                     : Rebalancer.formatCurrency(valueTWD))
                                     .foregroundColor(.secondary)
                             }
                         }
@@ -257,7 +283,7 @@ struct EditAssetView: View {
         updated.name = nameField.isEmpty ? symbol.uppercased() : nameField
         updated.shares = Double(shares) ?? 0
         updated.manualPrice = Double(manualPrice)
-        updated.marketType = asset.category == .stock ? marketType : nil
+        updated.marketType = (asset.category == .stock || asset.category == .bond) ? marketType : nil
         updated.updatedAt = Date()
 
         Task {

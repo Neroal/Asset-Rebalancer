@@ -6,23 +6,66 @@
 	objectVersion = 77;
 	objects = {
 
-/* Begin PBXFileReference section */
-		D82555042F59B8D500623301 /* AssetRebalancer.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = AssetRebalancer.app; sourceTree = BUILT_PRODUCTS_DIR; };
-/* End PBXFileReference section */
+/* Begin PBXBuildFile section */
+		D825558D2F59B95F00623301 /* AssetRowView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D825557F2F59B95F00623301 /* AssetRowView.swift */; };
+		D825558E2F59B95F00623301 /* AuthService.swift in Sources */ = {isa = PBXBuildFile; fileRef = D82555772F59B95F00623301 /* AuthService.swift */; };
+		D825558F2F59B95F00623301 /* PieChartView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D82555802F59B95F00623301 /* PieChartView.swift */; };
+		D82555902F59B95F00623301 /* Portfolio.swift in Sources */ = {isa = PBXBuildFile; fileRef = D82555732F59B95F00623301 /* Portfolio.swift */; };
+		D82555912F59B95F00623301 /* DashboardView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D82555832F59B95F00623301 /* DashboardView.swift */; };
+		D82555922F59B95F00623301 /* LanguageViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = D82555702F59B95F00623301 /* LanguageViewModel.swift */; };
+		D82555932F59B95F00623301 /* MainTabView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D82555852F59B95F00623301 /* MainTabView.swift */; };
+		D82555942F59B95F00623301 /* AssetsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D82555822F59B95F00623301 /* AssetsView.swift */; };
+		D82555952F59B95F00623301 /* PortfolioViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = D825557C2F59B95F00623301 /* PortfolioViewModel.swift */; };
+		D82555962F59B95F00623301 /* StockAPIService.swift in Sources */ = {isa = PBXBuildFile; fileRef = D825557A2F59B95F00623301 /* StockAPIService.swift */; };
+		D82555972F59B95F00623301 /* ExchangeRateService.swift in Sources */ = {isa = PBXBuildFile; fileRef = D82555782F59B95F00623301 /* ExchangeRateService.swift */; };
+		D82555982F59B95F00623301 /* AssetRebalancerApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = D82555892F59B95F00623301 /* AssetRebalancerApp.swift */; };
+		D82555992F59B95F00623301 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D825558A2F59B95F00623301 /* ContentView.swift */; };
+		D825559A2F59B95F00623301 /* Asset.swift in Sources */ = {isa = PBXBuildFile; fileRef = D82555722F59B95F00623301 /* Asset.swift */; };
+		D825559B2F59B95F00623301 /* SettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D82555862F59B95F00623301 /* SettingsView.swift */; };
+		D825559C2F59B95F00623301 /* FirestoreService.swift in Sources */ = {isa = PBXBuildFile; fileRef = D82555792F59B95F00623301 /* FirestoreService.swift */; };
+		D825559D2F59B95F00623301 /* LoginView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D82555842F59B95F00623301 /* LoginView.swift */; };
+		D825559E2F59B95F00623301 /* Rebalancer.swift in Sources */ = {isa = PBXBuildFile; fileRef = D825557D2F59B95F00623301 /* Rebalancer.swift */; };
+		D82555A12F59BA0200623301 /* FirebaseAuth in Frameworks */ = {isa = PBXBuildFile; productRef = D82555A02F59BA0200623301 /* FirebaseAuth */; };
+		D82555A32F59BA0200623301 /* FirebaseFirestore in Frameworks */ = {isa = PBXBuildFile; productRef = D82555A22F59BA0200623301 /* FirebaseFirestore */; };
+		D82555A62F59BA4800623301 /* GoogleSignIn in Frameworks */ = {isa = PBXBuildFile; productRef = D82555A52F59BA4800623301 /* GoogleSignIn */; };
+		D82555AE2F59C78F00623301 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = D82555AD2F59C78F00623301 /* Assets.xcassets */; };
+		D8E835F32F5AEE4A00FE040A /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = D8E835F22F5AEE4A00FE040A /* GoogleService-Info.plist */; };
+/* End PBXBuildFile section */
 
-/* Begin PBXFileSystemSynchronizedRootGroup section */
-		D82555062F59B8D500623301 /* AssetRebalancer */ = {
-			isa = PBXFileSystemSynchronizedRootGroup;
-			path = AssetRebalancer;
-			sourceTree = "<group>";
-		};
-/* End PBXFileSystemSynchronizedRootGroup section */
+/* Begin PBXFileReference section */
+		D82555702F59B95F00623301 /* LanguageViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LanguageViewModel.swift; sourceTree = "<group>"; };
+		D82555722F59B95F00623301 /* Asset.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Asset.swift; sourceTree = "<group>"; };
+		D82555732F59B95F00623301 /* Portfolio.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Portfolio.swift; sourceTree = "<group>"; };
+		D82555772F59B95F00623301 /* AuthService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthService.swift; sourceTree = "<group>"; };
+		D82555782F59B95F00623301 /* ExchangeRateService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExchangeRateService.swift; sourceTree = "<group>"; };
+		D82555792F59B95F00623301 /* FirestoreService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FirestoreService.swift; sourceTree = "<group>"; };
+		D825557A2F59B95F00623301 /* StockAPIService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StockAPIService.swift; sourceTree = "<group>"; };
+		D825557C2F59B95F00623301 /* PortfolioViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PortfolioViewModel.swift; sourceTree = "<group>"; };
+		D825557D2F59B95F00623301 /* Rebalancer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Rebalancer.swift; sourceTree = "<group>"; };
+		D825557F2F59B95F00623301 /* AssetRowView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AssetRowView.swift; sourceTree = "<group>"; };
+		D82555802F59B95F00623301 /* PieChartView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PieChartView.swift; sourceTree = "<group>"; };
+		D82555822F59B95F00623301 /* AssetsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AssetsView.swift; sourceTree = "<group>"; };
+		D82555832F59B95F00623301 /* DashboardView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DashboardView.swift; sourceTree = "<group>"; };
+		D82555842F59B95F00623301 /* LoginView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginView.swift; sourceTree = "<group>"; };
+		D82555852F59B95F00623301 /* MainTabView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainTabView.swift; sourceTree = "<group>"; };
+		D82555862F59B95F00623301 /* SettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsView.swift; sourceTree = "<group>"; };
+		D82555892F59B95F00623301 /* AssetRebalancerApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AssetRebalancerApp.swift; sourceTree = "<group>"; };
+		D825558A2F59B95F00623301 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
+		D82555A92F59BA9A00623301 /* AssetRebalancer.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = AssetRebalancer.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		D82555AA2F59BA9A00623301 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
+		D82555AD2F59C78F00623301 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
+		D8E835F02F5BF00000FE040A /* AssetRebalancer.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = AssetRebalancer.entitlements; sourceTree = "<group>"; };
+		D8E835F22F5AEE4A00FE040A /* GoogleService-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
+/* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
 		D82555012F59B8D500623301 /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				D82555A12F59BA0200623301 /* FirebaseAuth in Frameworks */,
+				D82555A32F59BA0200623301 /* FirebaseFirestore in Frameworks */,
+				D82555A62F59BA4800623301 /* GoogleSignIn in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -32,17 +75,94 @@
 		D82554FB2F59B8D500623301 = {
 			isa = PBXGroup;
 			children = (
-				D82555062F59B8D500623301 /* AssetRebalancer */,
-				D82555052F59B8D500623301 /* Products */,
+				D8E835F22F5AEE4A00FE040A /* GoogleService-Info.plist */,
+				D825558B2F59B95F00623301 /* AssetRebalancer */,
+				D82555A92F59BA9A00623301 /* AssetRebalancer.app */,
 			);
 			sourceTree = "<group>";
 		};
-		D82555052F59B8D500623301 /* Products */ = {
+		D82555712F59B95F00623301 /* Localization */ = {
 			isa = PBXGroup;
 			children = (
-				D82555042F59B8D500623301 /* AssetRebalancer.app */,
+				D82555702F59B95F00623301 /* LanguageViewModel.swift */,
 			);
-			name = Products;
+			path = Localization;
+			sourceTree = "<group>";
+		};
+		D82555742F59B95F00623301 /* Models */ = {
+			isa = PBXGroup;
+			children = (
+				D82555722F59B95F00623301 /* Asset.swift */,
+				D82555732F59B95F00623301 /* Portfolio.swift */,
+			);
+			path = Models;
+			sourceTree = "<group>";
+		};
+		D825557B2F59B95F00623301 /* Services */ = {
+			isa = PBXGroup;
+			children = (
+				D82555772F59B95F00623301 /* AuthService.swift */,
+				D82555782F59B95F00623301 /* ExchangeRateService.swift */,
+				D82555792F59B95F00623301 /* FirestoreService.swift */,
+				D825557A2F59B95F00623301 /* StockAPIService.swift */,
+			);
+			path = Services;
+			sourceTree = "<group>";
+		};
+		D825557E2F59B95F00623301 /* Utils */ = {
+			isa = PBXGroup;
+			children = (
+				D825557C2F59B95F00623301 /* PortfolioViewModel.swift */,
+				D825557D2F59B95F00623301 /* Rebalancer.swift */,
+			);
+			path = Utils;
+			sourceTree = "<group>";
+		};
+		D82555812F59B95F00623301 /* Components */ = {
+			isa = PBXGroup;
+			children = (
+				D825557F2F59B95F00623301 /* AssetRowView.swift */,
+				D82555802F59B95F00623301 /* PieChartView.swift */,
+			);
+			path = Components;
+			sourceTree = "<group>";
+		};
+		D82555872F59B95F00623301 /* Screens */ = {
+			isa = PBXGroup;
+			children = (
+				D82555822F59B95F00623301 /* AssetsView.swift */,
+				D82555832F59B95F00623301 /* DashboardView.swift */,
+				D82555842F59B95F00623301 /* LoginView.swift */,
+				D82555852F59B95F00623301 /* MainTabView.swift */,
+				D82555862F59B95F00623301 /* SettingsView.swift */,
+			);
+			path = Screens;
+			sourceTree = "<group>";
+		};
+		D82555882F59B95F00623301 /* Views */ = {
+			isa = PBXGroup;
+			children = (
+				D82555812F59B95F00623301 /* Components */,
+				D82555872F59B95F00623301 /* Screens */,
+			);
+			path = Views;
+			sourceTree = "<group>";
+		};
+		D825558B2F59B95F00623301 /* AssetRebalancer */ = {
+			isa = PBXGroup;
+			children = (
+				D8E835F02F5BF00000FE040A /* AssetRebalancer.entitlements */,
+				D82555AD2F59C78F00623301 /* Assets.xcassets */,
+				D82555AA2F59BA9A00623301 /* Info.plist */,
+				D82555712F59B95F00623301 /* Localization */,
+				D82555742F59B95F00623301 /* Models */,
+				D825557B2F59B95F00623301 /* Services */,
+				D825557E2F59B95F00623301 /* Utils */,
+				D82555882F59B95F00623301 /* Views */,
+				D82555892F59B95F00623301 /* AssetRebalancerApp.swift */,
+				D825558A2F59B95F00623301 /* ContentView.swift */,
+			);
+			path = AssetRebalancer;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -60,14 +180,14 @@
 			);
 			dependencies = (
 			);
-			fileSystemSynchronizedGroups = (
-				D82555062F59B8D500623301 /* AssetRebalancer */,
-			);
 			name = AssetRebalancer;
 			packageProductDependencies = (
+				D82555A02F59BA0200623301 /* FirebaseAuth */,
+				D82555A22F59BA0200623301 /* FirebaseFirestore */,
+				D82555A52F59BA4800623301 /* GoogleSignIn */,
 			);
 			productName = AssetRebalancer;
-			productReference = D82555042F59B8D500623301 /* AssetRebalancer.app */;
+			productReference = D82555A92F59BA9A00623301 /* AssetRebalancer.app */;
 			productType = "com.apple.product-type.application";
 		};
 /* End PBXNativeTarget section */
@@ -94,8 +214,12 @@
 			);
 			mainGroup = D82554FB2F59B8D500623301;
 			minimizedProjectReferenceProxies = 1;
+			packageReferences = (
+				D825559F2F59BA0200623301 /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */,
+				D82555A42F59BA4800623301 /* XCRemoteSwiftPackageReference "GoogleSignIn-iOS" */,
+			);
 			preferredProjectObjectVersion = 77;
-			productRefGroup = D82555052F59B8D500623301 /* Products */;
+			productRefGroup = D82554FB2F59B8D500623301;
 			projectDirPath = "";
 			projectRoot = "";
 			targets = (
@@ -109,6 +233,8 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				D8E835F32F5AEE4A00FE040A /* GoogleService-Info.plist in Resources */,
+				D82555AE2F59C78F00623301 /* Assets.xcassets in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -119,6 +245,24 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				D825558D2F59B95F00623301 /* AssetRowView.swift in Sources */,
+				D825558E2F59B95F00623301 /* AuthService.swift in Sources */,
+				D825558F2F59B95F00623301 /* PieChartView.swift in Sources */,
+				D82555902F59B95F00623301 /* Portfolio.swift in Sources */,
+				D82555912F59B95F00623301 /* DashboardView.swift in Sources */,
+				D82555922F59B95F00623301 /* LanguageViewModel.swift in Sources */,
+				D82555932F59B95F00623301 /* MainTabView.swift in Sources */,
+				D82555942F59B95F00623301 /* AssetsView.swift in Sources */,
+				D82555952F59B95F00623301 /* PortfolioViewModel.swift in Sources */,
+				D82555962F59B95F00623301 /* StockAPIService.swift in Sources */,
+				D82555972F59B95F00623301 /* ExchangeRateService.swift in Sources */,
+				D82555982F59B95F00623301 /* AssetRebalancerApp.swift in Sources */,
+				D82555992F59B95F00623301 /* ContentView.swift in Sources */,
+				D825559A2F59B95F00623301 /* Asset.swift in Sources */,
+				D825559B2F59B95F00623301 /* SettingsView.swift in Sources */,
+				D825559C2F59B95F00623301 /* FirestoreService.swift in Sources */,
+				D825559D2F59B95F00623301 /* LoginView.swift in Sources */,
+				D825559E2F59B95F00623301 /* Rebalancer.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -177,7 +321,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 26.2;
+				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
 				LOCALIZATION_PREFERS_STRING_CATALOGS = YES;
 				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
 				MTL_FAST_MATH = YES;
@@ -234,7 +378,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 26.2;
+				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
 				LOCALIZATION_PREFERS_STRING_CATALOGS = YES;
 				MTL_ENABLE_DEBUG_INFO = NO;
 				MTL_FAST_MATH = YES;
@@ -249,21 +393,27 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_ENTITLEMENTS = AssetRebalancer/AssetRebalancer.entitlements;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = 3YS47ACJA4;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = AssetRebalancer/Info.plist;
+				INFOPLIST_KEY_CFBundleDisplayName = "Asset Rebalancer";
+				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.finance";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = com.assetrebalancer.AssetRebalancer;
+				MARKETING_VERSION = 1.3;
+				PRODUCT_BUNDLE_IDENTIFIER = "com.neroal.asset-rebalancer";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				STRING_CATALOG_GENERATE_SYMBOLS = YES;
 				SWIFT_APPROACHABLE_CONCURRENCY = YES;
@@ -280,21 +430,27 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_ENTITLEMENTS = AssetRebalancer/AssetRebalancer.entitlements;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = 3YS47ACJA4;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = AssetRebalancer/Info.plist;
+				INFOPLIST_KEY_CFBundleDisplayName = "Asset Rebalancer";
+				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.finance";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = com.assetrebalancer.AssetRebalancer;
+				MARKETING_VERSION = 1.3;
+				PRODUCT_BUNDLE_IDENTIFIER = "com.neroal.asset-rebalancer";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				STRING_CATALOG_GENERATE_SYMBOLS = YES;
 				SWIFT_APPROACHABLE_CONCURRENCY = YES;
@@ -328,6 +484,43 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
+
+/* Begin XCRemoteSwiftPackageReference section */
+		D825559F2F59BA0200623301 /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/firebase/firebase-ios-sdk";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 12.10.0;
+			};
+		};
+		D82555A42F59BA4800623301 /* XCRemoteSwiftPackageReference "GoogleSignIn-iOS" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/google/GoogleSignIn-iOS";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 9.1.0;
+			};
+		};
+/* End XCRemoteSwiftPackageReference section */
+
+/* Begin XCSwiftPackageProductDependency section */
+		D82555A02F59BA0200623301 /* FirebaseAuth */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = D825559F2F59BA0200623301 /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */;
+			productName = FirebaseAuth;
+		};
+		D82555A22F59BA0200623301 /* FirebaseFirestore */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = D825559F2F59BA0200623301 /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */;
+			productName = FirebaseFirestore;
+		};
+		D82555A52F59BA4800623301 /* GoogleSignIn */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = D82555A42F59BA4800623301 /* XCRemoteSwiftPackageReference "GoogleSignIn-iOS" */;
+			productName = GoogleSignIn;
+		};
+/* End XCSwiftPackageProductDependency section */
 	};
 	rootObject = D82554FC2F59B8D500623301 /* Project object */;
 }

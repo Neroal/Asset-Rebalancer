@@ -4,6 +4,8 @@ struct DashboardView: View {
     @EnvironmentObject var portfolioVM: PortfolioViewModel
     @EnvironmentObject var lang: LanguageViewModel
 
+    private var hidden: Bool { portfolioVM.hideAssets }
+
     var body: some View {
         NavigationStack {
             ScrollView {
@@ -48,11 +50,26 @@ struct DashboardView: View {
 
     private var totalAssetsCard: some View {
         VStack(spacing: 8) {
-            Text(lang.totalAssets)
-                .font(.subheadline)
-                .foregroundColor(.secondary)
+            HStack {
+                Spacer()
+                Text(lang.totalAssets)
+                    .font(.subheadline)
+                    .foregroundColor(.secondary)
+                Button {
+                    withAnimation(.easeInOut(duration: 0.2)) {
+                        portfolioVM.hideAssets.toggle()
+                    }
+                } label: {
+                    Image(systemName: hidden ? "eye.slash" : "eye")
+                        .font(.subheadline)
+                        .foregroundColor(.secondary)
+                }
+                Spacer()
+            }
 
-            Text(Rebalancer.formatCurrency(portfolioVM.summary.totalValueTWD))
+            Text(hidden
+                 ? "NT$ \(PortfolioViewModel.maskedText)"
+                 : Rebalancer.formatCurrency(portfolioVM.summary.totalValueTWD))
                 .font(.system(size: 36, weight: .bold, design: .rounded))
 
             if portfolioVM.isRefreshing {
@@ -81,7 +98,9 @@ struct DashboardView: View {
 
             PieChartView(
                 segments: portfolioVM.chartSegments,
-                centerText: Rebalancer.formatCurrency(portfolioVM.summary.totalValueTWD)
+                centerText: hidden
+                    ? "NT$ \(PortfolioViewModel.maskedText)"
+                    : Rebalancer.formatCurrency(portfolioVM.summary.totalValueTWD)
             )
             .frame(height: 220)
 
@@ -89,11 +108,12 @@ struct DashboardView: View {
             HStack(spacing: 24) {
                 ForEach(AssetCategory.allCases) { category in
                     let percentage = portfolioVM.summary.categoryPercentages[category] ?? 0
+                    let name = lang.localized(category.displayName)
                     HStack(spacing: 6) {
                         Circle()
-                            .fill(colorForCategory(category))
+                            .fill(category.swiftUIColor)
                             .frame(width: 10, height: 10)
-                        Text("\(category.displayName.zh) \(Rebalancer.formatPercentage(percentage))")
+                        Text("\(name) \(Rebalancer.formatPercentage(percentage))")
                             .font(.caption)
                             .foregroundColor(.secondary)
                     }
@@ -143,7 +163,9 @@ struct DashboardView: View {
                     category: category,
                     current: portfolioVM.summary.categoryPercentages[category] ?? 0,
                     target: portfolioVM.targetAllocation.percentage(for: category),
-                    deviation: portfolioVM.summary.deviations[category] ?? 0
+                    deviation: portfolioVM.summary.deviations[category] ?? 0,
+                    threshold: portfolioVM.deviationThreshold,
+                    language: lang.language
                 )
             }
         }
@@ -164,12 +186,10 @@ struct DashboardView: View {
                 if action.action != .hold {
                     HStack {
                         Circle()
-                            .fill(colorForCategory(action.category))
+                            .fill(action.category.swiftUIColor)
                             .frame(width: 10, height: 10)
 
-                        Text(lang.language == .zh
-                             ? action.category.displayName.zh
-                             : action.category.displayName.en)
+                        Text(lang.localized(action.category.displayName))
                             .font(.subheadline)
 
                         Spacer()
@@ -186,7 +206,9 @@ struct DashboardView: View {
                             )
                             .cornerRadius(6)
 
-                        Text(Rebalancer.formatCurrency(action.amountTWD))
+                        Text(hidden
+                             ? "NT$ \(PortfolioViewModel.maskedText)"
+                             : Rebalancer.formatCurrency(action.amountTWD))
                             .font(.subheadline)
                             .fontWeight(.medium)
                     }
@@ -199,15 +221,6 @@ struct DashboardView: View {
         .cornerRadius(16)
     }
 
-    // MARK: - Helpers
-
-    private func colorForCategory(_ category: AssetCategory) -> Color {
-        switch category {
-        case .stock: return .blue
-        case .bond: return .green
-        case .cash: return .orange
-        }
-    }
 }
 
 // MARK: - Deviation Row
@@ -216,15 +229,17 @@ struct DeviationRow: View {
     let current: Double
     let target: Double
     let deviation: Double
+    var threshold: Double = 5.0
+    var language: AppLanguage = .zh
 
     var body: some View {
         VStack(spacing: 8) {
             HStack {
                 Circle()
-                    .fill(colorForCategory(category))
+                    .fill(category.swiftUIColor)
                     .frame(width: 10, height: 10)
 
-                Text(category.displayName.zh)
+                Text(language == .zh ? category.displayName.zh : category.displayName.en)
                     .font(.subheadline)
 
                 Spacer()
@@ -240,7 +255,7 @@ struct DeviationRow: View {
                 Text(deviation >= 0 ? "+\(Rebalancer.formatPercentage(deviation))" : Rebalancer.formatPercentage(deviation))
                     .font(.caption)
                     .fontWeight(.semibold)
-                    .foregroundColor(abs(deviation) > 5 ? .red : .secondary)
+                    .foregroundColor(abs(deviation) > threshold ? .red : .secondary)
             }
 
             // Progress bar
@@ -253,7 +268,7 @@ struct DeviationRow: View {
 
                     // Current value
                     RoundedRectangle(cornerRadius: 4)
-                        .fill(colorForCategory(category))
+                        .fill(category.swiftUIColor)
                         .frame(width: max(0, geo.size.width * current / 100), height: 6)
 
                     // Target marker
@@ -264,14 +279,6 @@ struct DeviationRow: View {
                 }
             }
             .frame(height: 12)
-        }
-    }
-
-    private func colorForCategory(_ category: AssetCategory) -> Color {
-        switch category {
-        case .stock: return .blue
-        case .bond: return .green
-        case .cash: return .orange
         }
     }
 }

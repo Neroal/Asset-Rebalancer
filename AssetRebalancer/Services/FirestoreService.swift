@@ -96,6 +96,23 @@ class FirestoreService {
 
         try await doc.setData(["deviationThreshold": threshold], merge: true)
     }
+
+    // MARK: - Delete All User Data
+
+    func deleteAllUserData() async throws {
+        guard let doc = userDocument() else {
+            throw FirestoreError.notAuthenticated
+        }
+
+        // Delete all assets in subcollection
+        let assetsSnapshot = try await doc.collection("assets").getDocuments()
+        for document in assetsSnapshot.documents {
+            try await document.reference.delete()
+        }
+
+        // Delete user document
+        try await doc.delete()
+    }
 }
 
 // MARK: - Errors

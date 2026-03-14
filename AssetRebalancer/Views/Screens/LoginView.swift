@@ -3,6 +3,7 @@ import SwiftUI
 struct LoginView: View {
     @EnvironmentObject var authVM: AuthViewModel
     @EnvironmentObject var lang: LanguageViewModel
+    @Environment(\.colorScheme) var colorScheme
 
     var body: some View {
         ZStack {
@@ -37,25 +38,45 @@ struct LoginView: View {
 
                 Spacer()
 
-                // Google Sign In Button
-                Button(action: {
-                    Task {
-                        await authVM.signInWithGoogle()
-                    }
-                }) {
-                    HStack(spacing: 12) {
-                        Image(systemName: "g.circle.fill")
-                            .font(.title2)
+                VStack(spacing: 16) {
+                    // Sign in with Apple (custom button)
+                    Button(action: {
+                        authVM.signInWithApple()
+                    }) {
+                        HStack(spacing: 12) {
+                            Image(systemName: "apple.logo")
+                                .font(.system(size: 20, weight: .semibold))
 
-                        Text(lang.signInWithGoogle)
-                            .font(.headline)
+                            Text("Sign in with Apple")
+                                .font(.system(size: 18, weight: .semibold))
+                        }
+                        .frame(maxWidth: .infinity)
+                        .frame(height: 56)
+                        .background(colorScheme == .dark ? Color.white : Color.black)
+                        .foregroundColor(colorScheme == .dark ? .black : .white)
+                        .cornerRadius(16)
                     }
-                    .frame(maxWidth: .infinity)
-                    .frame(height: 56)
-                    .background(Color.white)
-                    .foregroundColor(.black)
-                    .cornerRadius(16)
-                    .shadow(color: .black.opacity(0.1), radius: 4, y: 2)
+
+                    // Google Sign In Button
+                    Button(action: {
+                        Task {
+                            await authVM.signInWithGoogle()
+                        }
+                    }) {
+                        HStack(spacing: 12) {
+                            Image(systemName: "g.circle.fill")
+                                .font(.system(size: 20, weight: .semibold))
+
+                            Text("Sign in with Google")
+                                .font(.system(size: 18, weight: .semibold))
+                        }
+                        .frame(maxWidth: .infinity)
+                        .frame(height: 56)
+                        .background(Color.white)
+                        .foregroundColor(.black)
+                        .cornerRadius(16)
+                        .shadow(color: .black.opacity(0.1), radius: 4, y: 2)
+                    }
                 }
                 .padding(.horizontal, 32)
 

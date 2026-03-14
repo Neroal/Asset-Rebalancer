@@ -1,4 +1,5 @@
 import Foundation
+import SwiftUI
 
 // MARK: - Asset Category
 enum AssetCategory: String, Codable, CaseIterable, Identifiable {
@@ -18,9 +19,23 @@ enum AssetCategory: String, Codable, CaseIterable, Identifiable {
 
     var color: String {
         switch self {
+<<<<<<< HEAD
         case .stock: return "StockColor"   // Blue
         case .bond: return "BondColor"     // Green
         case .cash: return "CashColor"     // Gold
+=======
+        case .stock: return "StockColor"
+        case .bond: return "BondColor"
+        case .cash: return "CashColor"
+        }
+    }
+
+    var swiftUIColor: Color {
+        switch self {
+        case .stock: return .blue
+        case .bond: return .green
+        case .cash: return .orange
+>>>>>>> 91d4662 (v1.3: Add account deletion, eye toggle, bilingual support, and code cleanup)
         }
     }
 }
@@ -30,10 +45,17 @@ enum MarketType: String, Codable, CaseIterable {
     case tw = "TW"
     case us = "US"
 
+<<<<<<< HEAD
     var displayName: String {
         switch self {
         case .tw: return "台股"
         case .us: return "美股"
+=======
+    var displayName: (zh: String, en: String) {
+        switch self {
+        case .tw: return ("台股", "TW Stock")
+        case .us: return ("美股", "US Stock")
+>>>>>>> 91d4662 (v1.3: Add account deletion, eye toggle, bilingual support, and code cleanup)
         }
     }
 }
