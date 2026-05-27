@@ -6,6 +6,7 @@ actor StockAPIService {
 
     private var cache: [String: (price: Double, timestamp: Date)] = [:]
     private let cacheDuration: TimeInterval = 3600 // 1 hour
+    private var exchangeCache: [String: String] = [:] // symbol -> "tse" or "otc"
 
     // MARK: - Fetch Price
 
@@ -30,38 +31,32 @@ actor StockAPIService {
         return price
     }
 
-    // MARK: - TWSE OpenAPI
+    // MARK: - Taiwan Stocks (TWSE + TPEx auto-detect)
 
     private func fetchTWStockPrice(symbol: String) async throws -> Double {
-        let dateFormatter = DateFormatter()
-        dateFormatter.dateFormat = "yyyyMMdd"
-        let today = dateFormatter.string(from: Date())
-
-        let urlString = "https://www.twse.com.tw/exchangeReport/STOCK_DAY?response=json&date=\(today)&stockNo=\(symbol)"
-        guard let url = URL(string: urlString) else {
-            throw StockAPIError.invalidURL
+        // Use cached exchange type if available
+        if let exchange = exchangeCache[symbol],
+           let price = try? await fetchRealtimePrice(symbol: symbol, exchange: exchange) {
+            return price
         }
 
-        let (data, _) = try await URLSession.shared.data(from: url)
-        guard let json = try JSONSerialization.jsonObject(with: data) as? [String: Any],
-              let dataArray = json["data"] as? [[String]],
-              let lastRow = dataArray.last else {
-            // Try alternative: fetch from previous month if no data today
-            return try await fetchTWSEAlternative(symbol: symbol)
+        // Try TSE realtime
+        if let price = try? await fetchRealtimePrice(symbol: symbol, exchange: "tse") {
+            exchangeCache[symbol] = "tse"
+            return price
         }
 
-        // Column 6 is closing price (index 6)
-        let priceString = lastRow[6].replacingOccurrences(of: ",", with: "")
-        guard let price = Double(priceString) else {
-            throw StockAPIError.parseError
+        // Try OTC realtime
+        if let price = try? await fetchRealtimePrice(symbol: symbol, exchange: "otc") {
+            exchangeCache[symbol] = "otc"
+            return price
         }
 
-        return price
+        throw StockAPIError.noData
     }
 
-    private func fetchTWSEAlternative(symbol: String) async throws -> Double {
-        // Try fetching real-time quote
-        let urlString = "https://mis.twse.com.tw/stock/api/getStockInfo.jsp?ex_ch=tse_\(symbol).tw"
+    private func fetchRealtimePrice(symbol: String, exchange: String) async throws -> Double {
+        let urlString = "https://mis.twse.com.tw/stock/api/getStockInfo.jsp?ex_ch=\(exchange)_\(symbol).tw"
         guard let url = URL(string: urlString) else {
             throw StockAPIError.invalidURL
         }
@@ -69,9 +64,14 @@ actor StockAPIService {
         let (data, _) = try await URLSession.shared.data(from: url)
         guard let json = try JSONSerialization.jsonObject(with: data) as? [String: Any],
               let msgArray = json["msgArray"] as? [[String: Any]],
-              let first = msgArray.first,
-              let priceStr = first["z"] as? String,
-              let price = Double(priceStr) else {
+              let first = msgArray.first else {
+            throw StockAPIError.noData
+        }
+
+        // z = current price (trading hours), y = previous close (fallback)
+        let priceStr = (first["z"] as? String).flatMap { $0 != "-" ? $0 : nil }
+                    ?? (first["y"] as? String)
+        guard let priceStr, let price = Double(priceStr) else {
             throw StockAPIError.noData
         }
 
@@ -106,6 +106,7 @@ actor StockAPIService {
 
     func clearCache() {
         cache.removeAll()
+        exchangeCache.removeAll()
     }
 }
 
