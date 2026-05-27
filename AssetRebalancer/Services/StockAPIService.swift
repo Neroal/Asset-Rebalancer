@@ -5,6 +5,7 @@ actor StockAPIService {
     static let shared = StockAPIService()
 
     private var cache: [String: (price: Double, timestamp: Date)] = [:]
+    private var exchangeCache: [String: String] = [:]
     private let cacheDuration: TimeInterval = 3600 // 1 hour
 
     // MARK: - Fetch Price

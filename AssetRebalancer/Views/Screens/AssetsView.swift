@@ -159,7 +159,7 @@ struct AddAssetView: View {
                         saveAsset()
                     }
                     .fontWeight(.semibold)
-                    .disabled(symbol.isEmpty && nameField.isEmpty)
+                    .disabled(category == .cash ? nameField.isEmpty : symbol.isEmpty)
                 }
             }
         }
@@ -278,10 +278,14 @@ struct EditAssetView: View {
     }
 
     private func updateAsset() {
+        guard let sharesValue = Double(shares), sharesValue > 0 else {
+            portfolioVM.errorMessage = lang.invalidInput
+            return
+        }
         var updated = asset
         updated.symbol = symbol.uppercased()
         updated.name = nameField.isEmpty ? symbol.uppercased() : nameField
-        updated.shares = Double(shares) ?? 0
+        updated.shares = sharesValue
         updated.manualPrice = Double(manualPrice)
         updated.marketType = (asset.category == .stock || asset.category == .bond) ? marketType : nil
         updated.updatedAt = Date()

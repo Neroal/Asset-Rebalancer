@@ -47,7 +47,7 @@ struct LoginView: View {
                             Image(systemName: "apple.logo")
                                 .font(.system(size: 20, weight: .semibold))
 
-                            Text("Sign in with Apple")
+                            Text(lang.signInWithApple)
                                 .font(.system(size: 18, weight: .semibold))
                         }
                         .frame(maxWidth: .infinity)
@@ -67,7 +67,7 @@ struct LoginView: View {
                             Image(systemName: "g.circle.fill")
                                 .font(.system(size: 20, weight: .semibold))
 
-                            Text("Sign in with Google")
+                            Text(lang.signInWithGoogle)
                                 .font(.system(size: 18, weight: .semibold))
                         }
                         .frame(maxWidth: .infinity)

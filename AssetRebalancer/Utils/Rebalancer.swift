@@ -84,12 +84,16 @@ struct Rebalancer {
 
     // MARK: - Formatting
 
+    private static let currencyFormatter: NumberFormatter = {
+        let f = NumberFormatter()
+        f.numberStyle = .decimal
+        f.maximumFractionDigits = 0
+        f.groupingSeparator = ","
+        return f
+    }()
+
     static func formatCurrency(_ value: Double, symbol: String = "NT$") -> String {
-        let formatter = NumberFormatter()
-        formatter.numberStyle = .decimal
-        formatter.maximumFractionDigits = 0
-        formatter.groupingSeparator = ","
-        let formatted = formatter.string(from: NSNumber(value: value)) ?? "0"
+        let formatted = currencyFormatter.string(from: NSNumber(value: value)) ?? "0"
         return "\(symbol)\(formatted)"
     }
 
