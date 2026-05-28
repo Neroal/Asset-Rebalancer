@@ -8,7 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		D825558D2F59B95F00623301 /* AssetRowView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D825557F2F59B95F00623301 /* AssetRowView.swift */; };
-		D825558E2F59B95F00623301 /* AuthService.swift in Sources */ = {isa = PBXBuildFile; fileRef = D82555772F59B95F00623301 /* AuthService.swift */; };
+		D825558E2F59B95F00623301 /* AuthViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = D82555772F59B95F00623301 /* AuthViewModel.swift */; };
 		D825558F2F59B95F00623301 /* PieChartView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D82555802F59B95F00623301 /* PieChartView.swift */; };
 		D82555902F59B95F00623301 /* Portfolio.swift in Sources */ = {isa = PBXBuildFile; fileRef = D82555732F59B95F00623301 /* Portfolio.swift */; };
 		D82555912F59B95F00623301 /* DashboardView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D82555832F59B95F00623301 /* DashboardView.swift */; };
@@ -29,11 +29,11 @@
 		D82555A32F59BA0200623301 /* FirebaseFirestore in Frameworks */ = {isa = PBXBuildFile; productRef = D82555A22F59BA0200623301 /* FirebaseFirestore */; };
 		D82555A62F59BA4800623301 /* GoogleSignIn in Frameworks */ = {isa = PBXBuildFile; productRef = D82555A52F59BA4800623301 /* GoogleSignIn */; };
 		D82555AE2F59C78F00623301 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = D82555AD2F59C78F00623301 /* Assets.xcassets */; };
-		D8B51DCC2FC7E65300F385BE /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = D8B51DCB2FC7E65300F385BE /* GoogleService-Info.plist */; };
 		D82555C52F59B95F00623301 /* AddAssetView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D82555C12F59B95F00623301 /* AddAssetView.swift */; };
 		D82555C62F59B95F00623301 /* EditAssetView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D82555C22F59B95F00623301 /* EditAssetView.swift */; };
 		D82555C72F59B95F00623301 /* DeviationRow.swift in Sources */ = {isa = PBXBuildFile; fileRef = D82555C32F59B95F00623301 /* DeviationRow.swift */; };
 		D82555C82F59B95F00623301 /* AllocationSlider.swift in Sources */ = {isa = PBXBuildFile; fileRef = D82555C42F59B95F00623301 /* AllocationSlider.swift */; };
+		D8B51DCC2FC7E65300F385BE /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = D8B51DCB2FC7E65300F385BE /* GoogleService-Info.plist */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -46,10 +46,6 @@
 		D825557A2F59B95F00623301 /* StockAPIService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StockAPIService.swift; sourceTree = "<group>"; };
 		D825557C2F59B95F00623301 /* PortfolioViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PortfolioViewModel.swift; sourceTree = "<group>"; };
 		D825557D2F59B95F00623301 /* Rebalancer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Rebalancer.swift; sourceTree = "<group>"; };
-		D82555C12F59B95F00623301 /* AddAssetView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddAssetView.swift; sourceTree = "<group>"; };
-		D82555C22F59B95F00623301 /* EditAssetView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditAssetView.swift; sourceTree = "<group>"; };
-		D82555C32F59B95F00623301 /* DeviationRow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DeviationRow.swift; sourceTree = "<group>"; };
-		D82555C42F59B95F00623301 /* AllocationSlider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AllocationSlider.swift; sourceTree = "<group>"; };
 		D825557F2F59B95F00623301 /* AssetRowView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AssetRowView.swift; sourceTree = "<group>"; };
 		D82555802F59B95F00623301 /* PieChartView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PieChartView.swift; sourceTree = "<group>"; };
 		D82555822F59B95F00623301 /* AssetsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AssetsView.swift; sourceTree = "<group>"; };
@@ -62,6 +58,10 @@
 		D82555A92F59BA9A00623301 /* AssetRebalancer.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = AssetRebalancer.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		D82555AA2F59BA9A00623301 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
 		D82555AD2F59C78F00623301 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
+		D82555C12F59B95F00623301 /* AddAssetView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddAssetView.swift; sourceTree = "<group>"; };
+		D82555C22F59B95F00623301 /* EditAssetView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditAssetView.swift; sourceTree = "<group>"; };
+		D82555C32F59B95F00623301 /* DeviationRow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DeviationRow.swift; sourceTree = "<group>"; };
+		D82555C42F59B95F00623301 /* AllocationSlider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AllocationSlider.swift; sourceTree = "<group>"; };
 		D8B51DCB2FC7E65300F385BE /* GoogleService-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 		D8E835F02F5BF00000FE040A /* AssetRebalancer.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = AssetRebalancer.entitlements; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -95,16 +95,6 @@
 				D82555732F59B95F00623301 /* Portfolio.swift */,
 			);
 			path = Models;
-			sourceTree = "<group>";
-		};
-		D82555B12F59B95F00623301 /* ViewModels */ = {
-			isa = PBXGroup;
-			children = (
-				D82555772F59B95F00623301 /* AuthViewModel.swift */,
-				D825557C2F59B95F00623301 /* PortfolioViewModel.swift */,
-				D82555702F59B95F00623301 /* LanguageViewModel.swift */,
-			);
-			path = ViewModels;
 			sourceTree = "<group>";
 		};
 		D825557B2F59B95F00623301 /* Services */ = {
@@ -175,6 +165,16 @@
 				D825558A2F59B95F00623301 /* ContentView.swift */,
 			);
 			path = AssetRebalancer;
+			sourceTree = "<group>";
+		};
+		D82555B12F59B95F00623301 /* ViewModels */ = {
+			isa = PBXGroup;
+			children = (
+				D82555772F59B95F00623301 /* AuthViewModel.swift */,
+				D825557C2F59B95F00623301 /* PortfolioViewModel.swift */,
+				D82555702F59B95F00623301 /* LanguageViewModel.swift */,
+			);
+			path = ViewModels;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -258,7 +258,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				D825558D2F59B95F00623301 /* AssetRowView.swift in Sources */,
-				D825558E2F59B95F00623301 /* AuthService.swift in Sources */,
+				D825558E2F59B95F00623301 /* AuthViewModel.swift in Sources */,
 				D825558F2F59B95F00623301 /* PieChartView.swift in Sources */,
 				D82555902F59B95F00623301 /* Portfolio.swift in Sources */,
 				D82555912F59B95F00623301 /* DashboardView.swift in Sources */,
@@ -428,7 +428,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 1.4;
+				MARKETING_VERSION = 1.5;
 				PRODUCT_BUNDLE_IDENTIFIER = "com.neroal.asset-rebalancer";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				STRING_CATALOG_GENERATE_SYMBOLS = YES;
@@ -468,7 +468,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 1.4;
+				MARKETING_VERSION = 1.5;
 				PRODUCT_BUNDLE_IDENTIFIER = "com.neroal.asset-rebalancer";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				STRING_CATALOG_GENERATE_SYMBOLS = YES;
