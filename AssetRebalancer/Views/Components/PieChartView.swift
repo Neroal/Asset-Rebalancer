@@ -5,6 +5,8 @@ struct PieChartView: View {
     let centerText: String
 
     var body: some View {
+        let startAngles = computeStartAngles()
+
         GeometryReader { geo in
             let size = min(geo.size.width, geo.size.height)
             let center = CGPoint(x: geo.size.width / 2, y: geo.size.height / 2)
@@ -14,7 +16,7 @@ struct PieChartView: View {
             ZStack {
                 // Draw segments
                 ForEach(Array(segments.enumerated()), id: \.element.id) { index, segment in
-                    let startAngle = angleForIndex(index)
+                    let startAngle = startAngles[index]
                     let endAngle = startAngle + Angle(degrees: segment.percentage / 100 * 360)
 
                     Path { path in
@@ -34,7 +36,7 @@ struct PieChartView: View {
                         )
                         path.closeSubpath()
                     }
-                    .fill(colorForCategory(segment.category))
+                    .fill(segment.category.swiftUIColor)
 
                     // Percentage label
                     if segment.percentage > 5 {
@@ -52,7 +54,7 @@ struct PieChartView: View {
 
                 // Small gaps between segments
                 ForEach(Array(segments.enumerated()), id: \.element.id) { index, _ in
-                    let angle = angleForIndex(index)
+                    let angle = startAngles[index]
                     Path { path in
                         let x1 = center.x + innerRadius * cos(CGFloat(angle.radians - .pi / 2))
                         let y1 = center.y + innerRadius * sin(CGFloat(angle.radians - .pi / 2))
@@ -77,16 +79,13 @@ struct PieChartView: View {
         }
     }
 
-    private func angleForIndex(_ index: Int) -> Angle {
-        let total = segments.prefix(index).reduce(0) { $0 + $1.percentage }
-        return Angle(degrees: total / 100 * 360)
-    }
-
-    private func colorForCategory(_ category: AssetCategory) -> Color {
-        switch category {
-        case .stock: return .blue
-        case .bond: return .green
-        case .cash: return .orange
+    private func computeStartAngles() -> [Angle] {
+        var angles: [Angle] = []
+        var cumulative = 0.0
+        for segment in segments {
+            angles.append(Angle(degrees: cumulative / 100 * 360))
+            cumulative += segment.percentage
         }
+        return angles
     }
 }

@@ -45,23 +45,25 @@ class FirestoreService {
         try await doc.collection("assets").document(assetID).delete()
     }
 
-    // MARK: - Target Allocation
+    // MARK: - Settings (combined fetch to avoid reading the same document twice)
 
-    func fetchTargetAllocation() async throws -> TargetAllocation {
+    func fetchSettings() async throws -> (target: TargetAllocation, threshold: Double) {
         guard let doc = userDocument() else {
             throw FirestoreError.notAuthenticated
         }
 
         let snapshot = try await doc.getDocument()
-        if let data = snapshot.data(),
-           let target = data["targetAllocation"] as? [String: Double] {
-            return TargetAllocation(
-                stock: target["stock"] ?? 60,
-                bond: target["bond"] ?? 30,
-                cash: target["cash"] ?? 10
-            )
+        let data = snapshot.data() ?? [:]
+
+        let target: TargetAllocation
+        if let t = data["targetAllocation"] as? [String: Double] {
+            target = TargetAllocation(stock: t["stock"] ?? 60, bond: t["bond"] ?? 30, cash: t["cash"] ?? 10)
+        } else {
+            target = TargetAllocation()
         }
-        return TargetAllocation()
+
+        let threshold = data["deviationThreshold"] as? Double ?? 5.0
+        return (target, threshold)
     }
 
     func saveTargetAllocation(_ target: TargetAllocation) async throws {
@@ -76,17 +78,6 @@ class FirestoreService {
                 "cash": target.cash
             ]
         ], merge: true)
-    }
-
-    // MARK: - Settings
-
-    func fetchDeviationThreshold() async throws -> Double {
-        guard let doc = userDocument() else {
-            throw FirestoreError.notAuthenticated
-        }
-
-        let snapshot = try await doc.getDocument()
-        return snapshot.data()?["deviationThreshold"] as? Double ?? 5.0
     }
 
     func saveDeviationThreshold(_ threshold: Double) async throws {

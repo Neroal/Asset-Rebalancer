@@ -58,12 +58,12 @@ struct Asset: Identifiable, Codable {
     var marketType: MarketType?     // TW or US (for stocks)
     var marketPrice: Double?        // Fetched market price
     var marketValueTWD: Double?     // Calculated value in TWD
-    var createdAt: Date
-    var updatedAt: Date
 
+    // displayValue is TWD-correct only for TW stocks and cash.
+    // For US stocks use marketValueTWD (which includes exchange rate).
     var displayValue: Double {
         if category == .cash {
-            return shares // For cash, shares = amount
+            return shares
         }
         if let price = marketPrice ?? manualPrice {
             return shares * price
@@ -87,8 +87,6 @@ struct Asset: Identifiable, Codable {
         self.marketType = marketType
         self.marketPrice = nil
         self.marketValueTWD = nil
-        self.createdAt = Date()
-        self.updatedAt = Date()
     }
 }
 

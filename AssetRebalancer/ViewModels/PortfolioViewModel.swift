@@ -35,12 +35,12 @@ class PortfolioViewModel: ObservableObject {
 
         do {
             async let fetchedAssets = firestore.fetchAssets()
-            async let fetchedTarget = firestore.fetchTargetAllocation()
-            async let fetchedThreshold = firestore.fetchDeviationThreshold()
+            async let fetchedSettings = firestore.fetchSettings()
 
-            assets = try await fetchedAssets
-            targetAllocation = try await fetchedTarget
-            deviationThreshold = try await fetchedThreshold
+            let (assetsResult, settingsResult) = try await (fetchedAssets, fetchedSettings)
+            assets = assetsResult
+            targetAllocation = settingsResult.target
+            deviationThreshold = settingsResult.threshold
             errorMessage = nil
 
             await refreshPrices()
@@ -98,7 +98,6 @@ class PortfolioViewModel: ObservableObject {
                     }
                 }
             } else if asset.category == .cash {
-                // Cash: shares = amount in TWD
                 updatedAssets[i].marketValueTWD = asset.shares
             }
         }
@@ -117,11 +116,12 @@ class PortfolioViewModel: ObservableObject {
     // MARK: - Recalculate
 
     func recalculate() {
-        summary = Rebalancer.calculateSummary(
+        let s = Rebalancer.calculateSummary(
             assets: assets, target: targetAllocation, threshold: deviationThreshold
         )
+        summary = s
         rebalanceActions = Rebalancer.calculateActions(
-            assets: assets, target: targetAllocation, threshold: deviationThreshold
+            summary: s, target: targetAllocation, threshold: deviationThreshold
         )
     }
 
@@ -142,16 +142,19 @@ class PortfolioViewModel: ObservableObject {
     }
 
     func updateAsset(_ asset: Asset) async {
-        if let index = assets.firstIndex(where: { $0.id == asset.id }) {
-            assets[index] = asset
-            recalculate()
+        guard let index = assets.firstIndex(where: { $0.id == asset.id }) else { return }
+        assets[index] = asset
+        recalculate()
 
-            do {
-                try await firestore.saveAsset(asset)
-                errorMessage = nil
-            } catch {
-                errorMessage = error.localizedDescription
-            }
+        do {
+            try await firestore.saveAsset(asset)
+            errorMessage = nil
+        } catch {
+            errorMessage = error.localizedDescription
+        }
+
+        if asset.marketType != nil {
+            await refreshPrices()
         }
     }
 
