@@ -4,44 +4,44 @@
 ![Platform](https://img.shields.io/badge/Platform-iOS_16+-007AFF?logo=apple&logoColor=white)
 ![License](https://img.shields.io/badge/License-MIT-green)
 
-An iOS portfolio management app that helps users track asset allocation and maintain their ideal investment ratios through automated rebalancing suggestions.
+一款 iOS 投資組合管理 App，協助使用者追蹤資產配置，並透過自動化再平衡建議維持理想的投資比例。
 
-## Features
+## 功能特色
 
-- **Multi-Asset Tracking**: Supports Taiwan stocks, US stocks, bonds, and cash — all valued in TWD
-- **Real-Time Quotes**: Fetches live prices from TWSE (Taiwan Stock Exchange) and Yahoo Finance, with automatic USD/TWD currency conversion
-- **Smart Rebalancing**: Calculates buy/sell recommendations based on customizable target allocations and deviation thresholds
-- **Visual Dashboard**: Donut pie chart for intuitive visualization of portfolio allocation and deviations
-- **Cloud Sync**: Data synced in real time to Firebase Firestore via Google Sign-In authentication
-- **Bilingual UI**: Supports Traditional Chinese and English
+- **多元資產追蹤**：支援台股、美股、債券與現金，統一以新台幣計價
+- **即時報價**：從台灣證交所（TWSE）與 Yahoo Finance 取得即時股價，並自動換算美元／新台幣匯率
+- **智慧再平衡**：根據可自訂的目標配置與偏差門檻，計算買進／賣出建議
+- **視覺化儀表板**：以環形圓餅圖直觀呈現投資組合配置與偏差狀況
+- **雲端同步**：透過 Google 登入驗證，即時同步資料至 Firebase Firestore
+- **雙語介面**：支援繁體中文與英文
 
-## Screenshots
+## 截圖
 
-<!-- Add app screenshots here -->
+<!-- 在此新增 App 截圖 -->
 
-## Requirements
+## 系統需求
 
 - iOS 16.0+
 - Xcode 15.0+
 - Swift 5.9+
 
-## Getting Started
+## 快速開始
 
-1. Clone the repository:
+1. Clone 儲存庫：
    ```bash
    git clone https://github.com/Neroal/AssetRebalancer.git
    ```
 
-2. Set up Firebase:
-   - Create a project in the [Firebase Console](https://console.firebase.google.com/)
-   - Enable **Authentication** (Google Sign-In and Apple Sign-In) and **Firestore Database**
-   - Download `GoogleService-Info.plist` and place it in the project root directory
+2. 設定 Firebase：
+   - 在 [Firebase Console](https://console.firebase.google.com/) 建立專案
+   - 啟用 **Authentication**（Google 登入與 Apple 登入）以及 **Firestore Database**
+   - 下載 `GoogleService-Info.plist` 並放置於專案根目錄
 
-   > **Note**: `GoogleService-Info.plist` is excluded from version control via `.gitignore`. Use `GoogleService-Info.template.plist` as a reference for the required keys.
+   > **注意**：`GoogleService-Info.plist` 已透過 `.gitignore` 排除於版本控制之外。請參考 `GoogleService-Info.template.plist` 了解所需的金鑰格式。
 
-3. Configure Firestore Security Rules:
-   - In the Firebase Console, go to **Firestore Database → Rules**
-   - Set the following rules to ensure each user can only access their own data:
+3. 設定 Firestore 安全規則：
+   - 在 Firebase Console 前往 **Firestore Database → 規則**
+   - 設定以下規則，確保每位使用者僅能存取自己的資料：
      ```
      rules_version = '2';
      service cloud.firestore {
@@ -54,82 +54,70 @@ An iOS portfolio management app that helps users track asset allocation and main
      }
      ```
 
-4. Open `AssetRebalancer.xcodeproj` in Xcode
+4. 以 Xcode 開啟 `AssetRebalancer.xcodeproj`
 
-5. Install dependencies (resolved automatically via Swift Package Manager)
+5. 安裝相依套件（透過 Swift Package Manager 自動解析）
 
-6. Select a simulator or device, then Build & Run
+6. 選擇模擬器或裝置後，建置並執行
 
-## Project Structure
+## 專案結構
 
 ```
 AssetRebalancer/
-├── AssetRebalancerApp.swift          # App entry point & Firebase initialization
-├── ContentView.swift                 # Root navigation (login / main view switch)
+├── AssetRebalancerApp.swift          # App 進入點與 Firebase 初始化
+├── ContentView.swift                 # 根導航（登入 / 主畫面切換）
 ├── Models/
-│   ├── Asset.swift                   # Asset data model (stocks, bonds, cash)
-│   └── Portfolio.swift               # Portfolio summary & rebalance actions
+│   ├── Asset.swift                   # 資產資料模型（股票、債券、現金）
+│   └── Portfolio.swift               # 投資組合摘要與再平衡操作
 ├── Services/
-│   ├── AuthService.swift             # Google Sign-In authentication
-│   ├── FirestoreService.swift        # Firestore data read/write
-│   ├── StockAPIService.swift         # TW / US stock quotes (with caching)
-│   └── ExchangeRateService.swift     # USD → TWD exchange rate conversion
+│   ├── AuthService.swift             # Google 登入驗證
+│   ├── FirestoreService.swift        # Firestore 資料讀寫
+│   ├── StockAPIService.swift         # 台股 / 美股報價（含快取）
+│   └── ExchangeRateService.swift     # 美元 → 新台幣匯率換算
 ├── Utils/
-│   ├── PortfolioViewModel.swift      # Main state management ViewModel
-│   └── Rebalancer.swift              # Rebalancing calculation logic
+│   ├── PortfolioViewModel.swift      # 主要狀態管理 ViewModel
+│   └── Rebalancer.swift              # 再平衡計算邏輯
 ├── Localization/
-│   └── LanguageViewModel.swift       # Chinese / English language toggle
+│   └── LanguageViewModel.swift       # 中文 / 英文語言切換
 └── Views/
     ├── Screens/
-    │   ├── MainTabView.swift         # Tab navigation
-    │   ├── LoginView.swift           # Google Sign-In screen
-    │   ├── DashboardView.swift       # Portfolio overview dashboard
-    │   ├── AssetsView.swift          # Asset list with add/edit
-    │   └── SettingsView.swift        # Settings (target allocation, language)
+    │   ├── MainTabView.swift         # 分頁導航
+    │   ├── LoginView.swift           # Google 登入畫面
+    │   ├── DashboardView.swift       # 投資組合總覽儀表板
+    │   ├── AssetsView.swift          # 資產列表（新增／編輯）
+    │   └── SettingsView.swift        # 設定（目標配置、語言）
     └── Components/
-        ├── AssetRowView.swift        # Asset list row component
-        └── PieChartView.swift        # Custom donut chart
+        ├── AssetRowView.swift        # 資產列表行元件
+        └── PieChartView.swift        # 自訂環形圖表
 ```
 
-## Tech Stack
+## 技術棧
 
-| Area | Technology |
-|------|------------|
-| UI Framework | SwiftUI |
-| Architecture | MVVM + `@EnvironmentObject` dependency injection |
-| Concurrency | Swift Concurrency (async/await + Actor) |
-| Backend | Firebase Auth + Firestore |
-| Authentication | Google Sign-In |
-| Stock Quotes | TWSE API, Yahoo Finance API |
-| Exchange Rates | ExchangeRate-API (with fallback API) |
+| 領域 | 技術 |
+|------|------|
+| UI 框架 | SwiftUI |
+| 架構 | MVVM + `@EnvironmentObject` 依賴注入 |
+| 並發處理 | Swift Concurrency（async/await + Actor）|
+| 後端 | Firebase Auth + Firestore |
+| 驗證 | Google 登入 |
+| 股票報價 | TWSE API、Yahoo Finance API |
+| 匯率 | ExchangeRate-API（含備援 API）|
 
-## Rebalancing Logic
+## 再平衡邏輯
 
-The core feature calculates how far each asset category deviates from the user's target allocation:
+核心功能計算各資產類別與使用者目標配置的偏差程度：
 
-- **Default Targets**: Stocks 60%, Bonds 30%, Cash 10% (customizable)
-- **Deviation Threshold**: Default 5% (adjustable from 1% to 20%)
-- When any category's actual percentage exceeds the threshold, the app suggests specific TWD amounts to buy or sell
+- **預設目標**：股票 60%、債券 30%、現金 10%（可自訂）
+- **偏差門檻**：預設 5%（可調整範圍 1% 至 20%）
+- 當任一類別的實際百分比超過門檻時，App 將建議具體的新台幣買進或賣出金額
 
-## Caching Strategy
+## 快取策略
 
-To reduce API calls and improve performance:
+為減少 API 呼叫次數並提升效能：
 
-- Stock price cache TTL: **1 hour**
-- Exchange rate cache TTL: **24 hours**
+- 股票價格快取有效期：**1 小時**
+- 匯率快取有效期：**24 小時**
 
-## Contributing
+## 授權條款
 
-Contributions are welcome! If you'd like to help improve AssetRebalancer:
-
-1. Fork the repository
-2. Create a feature branch (`git checkout -b feature/your-feature`)
-3. Commit your changes (`git commit -m 'Add your feature'`)
-4. Push to the branch (`git push origin feature/your-feature`)
-5. Open a Pull Request
-
-For bug reports or feature requests, please [open an issue](https://github.com/Neroal/AssetRebalancer/issues).
-
-## License
-
-This project is licensed under the MIT License — see the [LICENSE](LICENSE) file for details.
+本專案採用 MIT 授權條款，詳情請見 [LICENSE](LICENSE) 檔案。
