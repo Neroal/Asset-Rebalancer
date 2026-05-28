@@ -9,15 +9,21 @@ struct Rebalancer {
             categoryValues[category] = 0
         }
 
-        // Sum up values per category
         for asset in assets {
-            let value = asset.marketValueTWD ?? asset.displayValue
+            let value: Double
+            if let twdValue = asset.marketValueTWD {
+                value = twdValue
+            } else if asset.marketType == .us {
+                // US stock without a converted TWD value — displayValue is in USD, don't use it
+                value = 0
+            } else {
+                value = asset.displayValue
+            }
             categoryValues[asset.category, default: 0] += value
         }
 
         let totalValue = categoryValues.values.reduce(0, +)
 
-        // Calculate percentages and deviations
         var categoryPercentages: [AssetCategory: Double] = [:]
         var deviations: [AssetCategory: Double] = [:]
 
@@ -39,14 +45,13 @@ struct Rebalancer {
         )
     }
 
+    // Accepts a pre-computed summary to avoid recalculating it inside calculateActions.
     static func calculateActions(
-        assets: [Asset],
+        summary: PortfolioSummary,
         target: TargetAllocation,
         threshold: Double = 5.0
     ) -> [RebalanceAction] {
-        let summary = calculateSummary(assets: assets, target: target, threshold: threshold)
         let total = summary.totalValueTWD
-
         guard total > 0 else { return [] }
 
         var actions: [RebalanceAction] = []
@@ -57,25 +62,11 @@ struct Rebalancer {
             let deviation = currentPercent - targetPercent
 
             if abs(deviation) < threshold {
-                actions.append(RebalanceAction(
-                    category: category,
-                    action: .hold,
-                    amountTWD: 0
-                ))
+                actions.append(RebalanceAction(category: category, action: .hold, amountTWD: 0))
             } else if deviation > 0 {
-                let amount = (deviation / 100.0) * total
-                actions.append(RebalanceAction(
-                    category: category,
-                    action: .sell,
-                    amountTWD: amount
-                ))
+                actions.append(RebalanceAction(category: category, action: .sell, amountTWD: (deviation / 100.0) * total))
             } else {
-                let amount = abs(deviation / 100.0) * total
-                actions.append(RebalanceAction(
-                    category: category,
-                    action: .buy,
-                    amountTWD: amount
-                ))
+                actions.append(RebalanceAction(category: category, action: .buy, amountTWD: abs(deviation / 100.0) * total))
             }
         }
 
