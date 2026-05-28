@@ -34,16 +34,31 @@ An iOS portfolio management app that helps users track asset allocation and main
 
 2. Set up Firebase:
    - Create a project in the [Firebase Console](https://console.firebase.google.com/)
-   - Enable **Authentication** (Google Sign-In) and **Firestore Database**
-   - Download `GoogleService-Info.plist` and place it in the `AssetRebalancer/` directory
+   - Enable **Authentication** (Google Sign-In and Apple Sign-In) and **Firestore Database**
+   - Download `GoogleService-Info.plist` and place it in the project root directory
 
-   > **Note**: `GoogleService-Info.plist` contains sensitive API keys and is excluded from version control via `.gitignore`. Never commit this file to a public repository.
+   > **Note**: `GoogleService-Info.plist` is excluded from version control via `.gitignore`. Use `GoogleService-Info.template.plist` as a reference for the required keys.
 
-3. Open `AssetRebalancer.xcodeproj` in Xcode
+3. Configure Firestore Security Rules:
+   - In the Firebase Console, go to **Firestore Database → Rules**
+   - Set the following rules to ensure each user can only access their own data:
+     ```
+     rules_version = '2';
+     service cloud.firestore {
+       match /databases/{database}/documents {
+         match /users/{userId}/{document=**} {
+           allow read, write: if request.auth != null
+                              && request.auth.uid == userId;
+         }
+       }
+     }
+     ```
 
-4. Install dependencies (resolved automatically via Swift Package Manager)
+4. Open `AssetRebalancer.xcodeproj` in Xcode
 
-5. Select a simulator or device, then Build & Run
+5. Install dependencies (resolved automatically via Swift Package Manager)
+
+6. Select a simulator or device, then Build & Run
 
 ## Project Structure
 
